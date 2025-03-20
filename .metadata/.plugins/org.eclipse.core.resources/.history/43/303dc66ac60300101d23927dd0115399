@@ -1,0 +1,22 @@
+package simpleFactory;
+
+
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public class SinhVien {
+	private String maSinhVien;
+
+	private String hoTen;
+
+	private boolean gioiTinhNam;
+	Date ngaySinh;
+	
+	
+}

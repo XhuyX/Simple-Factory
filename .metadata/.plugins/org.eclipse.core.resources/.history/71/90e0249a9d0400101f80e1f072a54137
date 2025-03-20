@@ -1,0 +1,72 @@
+package simpleFactory;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class ChuongTrinh {
+	
+	private static void hienThiDanhSach(ArrayList<SinhVien> danhSach) {
+	    for (SinhVien sv : danhSach) {
+	        System.out.println(
+	            sv.getMaSinhVien() + " " + 
+	            sv.getHoTen() + " " + 
+	            sv.isGioiTinhNam() + " " + 
+	            sv.getNgaySinh()
+	        );
+	    }
+	}
+
+    public static void main(String[] arg) throws IOException, ParseException {
+        // 1.1: Hiển thị sinh viên trong file txt
+    	System.out.println("Sinh viên trong file txt");
+        SinhVienDAO daotxt,daodb;
+        SinhVienFactory f = new SinhVienFactory();
+        daotxt = f.getPhuongThuc("txt");
+        daodb = f.getPhuongThuc("not txt");
+        
+        hienThiDanhSach(daotxt.docDanhSachSinhVien());
+        //1.2:  Hiển thị sinh viên trong my sql server
+        System.out.println("\nSinh viên trong database");
+        
+        hienThiDanhSach(daodb.docDanhSachSinhVien());
+        //2.1 chèn sinh viên vào file txt
+        
+        SinhVien v = new SinhVien("T102002", "Huỳnh Quang", true, "2003/01/01");
+        boolean resultTxt = daotxt.insertSinhVien(v);
+        if (resultTxt) {
+        	System.out.println("Đã thêm sinh viên vào file txt");
+        }
+        else {
+        	System.out.println("Không thể thêm sinh viên vào file txt");
+        }
+        //2.2 chèn sinh viên vào db
+        SinhVien y = new SinhVien("T101997", "Nguyễn Công", true, "1999-01-01");
+        boolean resultDb =daodb.insertSinhVien(y);
+        if (resultDb) {
+        	System.out.println("Đã thêm sinh viên vào bảng SinhVien");
+        }
+        else {
+        	System.out.println("Không thể thêm sinh viên vào bảng SinhVien");
+        }
+        //3.1 xoá sinh viên có mã sinh viên từ txt...
+        String maSinhVienCanXoa = "T102002";
+        boolean resultDel = daotxt.deleteSinhVien(maSinhVienCanXoa);
+        if (resultDel) {
+        	System.out.println("Đã xoá sinh viên có mã " + maSinhVienCanXoa
+        			+" từ file txt");
+        }
+        else  {
+        	System.out.println("xoá không thành công từ file txt");
+        }
+        //3.2 xoa sinh vien từ db
+        boolean resultDelDB = daodb.deleteSinhVien(maSinhVienCanXoa);
+        if (resultDelDB) {
+        	System.out.println("Đã xoá sinh viên có mã " + maSinhVienCanXoa +
+        			"từ database");
+        }
+        else  {
+        	System.out.println("Xoá không thành công từ database");
+        }
+    }
+}

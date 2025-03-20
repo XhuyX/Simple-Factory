@@ -1,0 +1,128 @@
+package simpleFactory;
+
+import java.io.IOException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class DBSinhVienDAO implements SinhVienDAO {
+
+    @Override
+    public ArrayList<SinhVien> docDanhSachSinhVien(String sql) throws IOException {
+        ArrayList<SinhVien> lstSV = new ArrayList<>();
+        Connection cnn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            try {
+				cnn = KetNoiGetter.getInstance().getCnn();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            stmt = cnn.createStatement();
+            rs = stmt.executeQuery(sql);
+            
+            while (rs.next()) {
+                String maSinhVien = rs.getString("MaSinhVien");
+                String hoTen = rs.getString("HoTen");
+                boolean gioiTinhNam = rs.getBoolean("GioiTinhNam");
+                String ngaySinh = (rs.getDate("NgaySinh")).toString();
+                SinhVien sinhVien = new SinhVien(maSinhVien, hoTen, gioiTinhNam, ngaySinh);
+                lstSV.add(sinhVien);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (cnn != null) cnn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lstSV;
+    }
+    public boolean isExisted(String maSV) {
+        Connection cnn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        boolean exists = false;
+
+        try {
+            try {
+				cnn = KetNoiGetter.getInstance().getCnn();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} // Get connection
+            String sql = "SELECT 1 FROM SinhVien WHERE MaSinhVien = ?"; // Query to check existence
+            pstmt = cnn.prepareStatement(sql);
+            pstmt.setString(1, maSV);
+            rs = pstmt.executeQuery();
+            
+            exists = rs.next(); // If there is at least one row, the student exists
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (cnn != null) cnn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return exists;
+    }
+
+    @Override
+    public int insertSinhVien(SinhVien sv) {
+    	//thiếu xử lý trùng mã sv
+    	if (isExisted(sv.getMaSinhVien())==true ) return 0;
+        Connection cnn = null;
+        PreparedStatement pstmt = null;
+        try {
+            // Get connection
+            cnn = KetNoiGetter.getInstance().getCnn();
+            
+            // Define the SQL query
+            String sql = "INSERT INTO SinhVien (MaSinhVien, HoTen, GioiTinhNam, NgaySinh) VALUES (?, ?, ?, ?)";
+            
+            // Use PreparedStatement
+            pstmt = cnn.prepareStatement(sql);
+            pstmt.setString(1, sv.getMaSinhVien());
+            pstmt.setString(2, sv.getHoTen());
+            pstmt.setBoolean(3, sv.isGioiTinhNam());
+
+            // Convert String to java.sql.Date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(sv.getNgaySinh()); // Convert String to java.util.Date
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); // Convert to java.sql.Date
+
+            pstmt.setDate(4, sqlDate); // Set date in SQL
+
+            // Execute update
+            int rowsInserted = pstmt.executeUpdate();
+            return rowsInserted; // Return number of affected rows
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Indicate failure
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (cnn != null) cnn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+	@Override
+	public int deleteSinhVien(String maSinhVien) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}

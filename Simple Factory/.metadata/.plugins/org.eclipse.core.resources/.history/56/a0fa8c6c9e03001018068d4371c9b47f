@@ -1,0 +1,42 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class txtSinhVienDAO implements SinhVienDAO {
+
+    @Override
+    public ArrayList<SinhVien> docDanhSachSinhVien() throws IOException {
+        ArrayList<SinhVien> sv = new ArrayList<>();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(new FileReader("src/sinhvien.txt"));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] lines = line.split(",");
+                if (lines.length == 4) {
+                    try {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+                        // Parse the date and create the SinhVien object
+                        Date dob = formatter.parse(lines[3]);
+                        SinhVien x = new SinhVien(lines[0], lines[1], Boolean.parseBoolean(lines[2]), dob);
+                        sv.add(x);  // Add the SinhVien object to the list
+                    } catch (Exception e) {
+                        // Handle date parsing or any other exceptions here
+                        System.out.println("Error parsing data for line: " + line);
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } finally {
+            if (br != null) {
+                br.close();  // Close the BufferedReader
+            }
+        }
+        return sv;
+    }
+}

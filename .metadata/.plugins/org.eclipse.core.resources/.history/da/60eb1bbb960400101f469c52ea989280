@@ -1,0 +1,11 @@
+package simpleFactory;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+public interface SinhVienDAO {
+	ArrayList<SinhVien> docDanhSachSinhVien(String source) throws IOException, ParseException;
+	public int insertSinhVien (SinhVien sv) ;
+	public int deleteSinhVien (String maSinhVien);
+}

@@ -1,0 +1,6 @@
+module simpleFactory {
+	exports simpleFactory;
+
+	requires java.sql;
+	requires lombok;
+}

@@ -1,0 +1,42 @@
+package simpleFactory;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class ChuongTrinh {
+
+    public static void main(String[] arg) throws IOException, ParseException {
+        // 1.1: Hiển thị sinh viên trong file txt
+        SinhVienDAO dao;
+        SinhVienFactory f = new SinhVienFactory();
+        dao = f.getPhuongThuc("txt");
+        ArrayList<SinhVien> sv = dao.docDanhSachSinhVien("src/sinhvien.txt");
+        for (int i = 0; i < sv.size(); i++) {
+        	SinhVien x = sv.get(i);
+            System.out.println(x.getMaSinhVien() +" "+ x.getHoTen() +" " 
+            + x.isGioiTinhNam()  + " " + x.getNgaySinh());
+        }
+        //1.2:  Hiển thị sinh viên trong my sql server
+        
+        dao = f.getPhuongThuc("not txt");
+        ArrayList<SinhVien> sv2 = dao.docDanhSachSinhVien("select * from SinhVien");
+        for (int i = 0; i < sv2.size(); i++) {
+        	SinhVien x = sv2.get(i);
+            System.out.println(x.getMaSinhVien() +" "+ x.getHoTen() +" " 
+            + x.isGioiTinhNam()  + " " + x.getNgaySinh());
+        }
+        
+//        SinhVien v = new SinhVien("T102003", "Huỳnh Huy", true, "2003/01/01");
+//        int result = dao.insertSinhVien(v);
+//        if (result==1) {
+//        	System.out.println("chen vao txt thanh cong");
+//        }
+//        dao = f.getPhuongThuc("not txt");
+//        SinhVien y = new SinhVien("T101998", "Nguyễn Nữ", true, "1999-01-01");
+//        int result =dao.insertSinhVien(y);
+//        if (result==1) {
+//        	System.out.println("chen vao db thanh cong");
+//        }
+    }
+}

@@ -1,0 +1,91 @@
+package simpleFactory;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+
+public class txtSinhVienDAO implements SinhVienDAO {
+	String source = "src/sinhvien.txt";
+    @Override
+    public ArrayList<SinhVien> docDanhSachSinhVien(String src) throws IOException {
+
+    	//"mặc định sẽ đọc từ file sinhvien.txt"
+        ArrayList<SinhVien> sv = new ArrayList<>();
+        ArrayList<String> lines = FileHandler.readAll(src);
+        for (String line:lines) {
+        	String[] part = line.split(",");
+            if (part.length == 4) {
+                SinhVien x = new SinhVien(part[0], part[1],
+                		Boolean.parseBoolean(part[2]), part[3]);
+                sv.add(x);}
+        }
+                
+        return sv;
+    }
+    @Override
+    public int insertSinhVien (SinhVien sv) {
+    	// xử lý trùng mã sinh viên
+    	if (isExisted (sv.getMaSinhVien())) return 0;
+    	String filePath = "src/sinhvien.txt";
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+    		 writer.write("\n" + sv.getMaSinhVien() + "," + sv.getHoTen() + "," + sv.isGioiTinhNam() + "," + sv.getNgaySinh());
+            return 1;
+        } catch (IOException e) {
+           return 0;
+        }
+    }
+    Boolean isExisted (String maSV) {
+    	ArrayList<String> lines;
+		try {
+			lines = FileHandler.readAll("src/sinhvien.txt");
+		} catch (IOException e) {
+			return false;
+		}
+		for (String line : lines) {
+				String [] part = line.split(",");
+					if (part.length==4) {
+						String masv = part[0];
+						if (part[0].equals(maSV)) return true;
+					}
+					
+				}
+		return false;
+    }
+	@Override
+	public int deleteSinhVien(String maSinhVien) {
+	    ArrayList<String> sv = new ArrayList<>();
+	    boolean isDeleted = false;
+
+	    try (BufferedReader br = new BufferedReader(new FileReader("src/sinhvien.txt"))) {
+	        String line;
+	        while ((line = br.readLine()) != null) {
+	            String[] lines = line.split(",");
+	            if (lines.length == 4) {
+	                if (!lines[0].equals(maSinhVien)) {
+	                    sv.add(line);  // Keep the student if the ID doesn't match
+	                } else {
+	                    isDeleted = true;  // Mark as deleted if the ID matches
+	                }
+	            }
+	        }
+	    } catch (IOException e) {
+	        return 0;  // Return 0 if an error occurs
+	    }
+
+	    // Write back the updated list
+	    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/sinhvien.txt"))) {
+	        for (String student : sv) {
+	            bw.write(student);
+	            bw.newLine();
+	        }
+	    } catch (IOException e) {
+	        return 0;  // Return 0 if writing fails
+	    }
+
+	    return isDeleted ? 1 : -1;  // Return 1 if deleted, -1 if not found
+	}
+}

@@ -1,0 +1,13 @@
+package simpleFactory;
+
+public class DocSinhVienFactory {
+	public SinhVienDAO getPhuongThuc (String type) {
+		if (type=="txt") {
+			return new txtSinhVienDAO();
+		}
+		else {
+			return new DBSinhVienDAO();
+		}
+		
+	}
+}

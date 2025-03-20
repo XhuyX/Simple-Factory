@@ -1,0 +1,9 @@
+package simpleFactory;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public interface SinhVienDAO {
+	ArrayList<SinhVien> docDanhSachSinhVien() throws IOException;
+}

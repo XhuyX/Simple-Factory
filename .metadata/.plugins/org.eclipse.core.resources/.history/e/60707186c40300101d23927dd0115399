@@ -1,0 +1,30 @@
+package simpleFactory;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class ChuongTrinh {
+    // Adjust the format to match the input date format ("yyyy-MM-dd")
+    static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    
+    static void docsinhvien(String que, String type) throws IOException, ParseException {
+        SinhVienDAO dao;
+        SinhVienFactory f = new SinhVienFactory();
+        dao = f.getPhuongThuc(type);
+        ArrayList<SinhVien> sv = dao.docDanhSachSinhVien(que);
+        for (int i = 0; i < sv.size(); i++)
+            System.out.println(sv.get(i).getHoTen());
+    }
+
+    public static void main(String[] arg) throws IOException, ParseException {
+        // Example to insert a new SinhVien (this works after modifying the format)
+        SinhVienDAO dao;
+        SinhVienFactory f = new SinhVienFactory();
+        dao = f.getPhuongThuc("txt");
+        docsinhvien("/sinhvien.txt","txt");
+        // This should now work since the formatter matches the input date format
+//        SinhVien v = new SinhVien("T102003", "Huỳnh Huy", true, formatter.parse("2003-01-01"));
+//        dao.insertSinhVien(v);
+    }
+}

@@ -1,0 +1,36 @@
+package simpleFactory;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class KetNoiGetter {
+    private Connection cnn = null;
+
+
+    public Connection getCnn(){
+        return cnn;
+    }
+
+    private static KetNoiGetter instance = null;
+
+   
+    private KetNoiGetter() throws SQLException, ClassNotFoundException {
+        // Tải driver trước khi tạo kết nối
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        System.out.print("nap drive ok");
+        // URL kết nối đến SQL Server
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=ViDuDB;user=sa;password=sa;trustServerCertificate=true;";
+
+        // Tạo kết nối
+        cnn = DriverManager.getConnection(url);
+    }
+
+    // Lấy thể hiện duy nhất của class
+    public static KetNoiGetter getInstance() throws SQLException, ClassNotFoundException {
+        if (instance == null) {
+            instance = new KetNoiGetter();
+        }
+        return instance;
+    }
+}

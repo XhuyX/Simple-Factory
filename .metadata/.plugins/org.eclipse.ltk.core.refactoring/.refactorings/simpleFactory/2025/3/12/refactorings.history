@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;simpleFactory&apos; to &apos;T1020625&apos;&#x0D;&#x0A;- Original project: &apos;simpleFactory&apos;&#x0D;&#x0A;- Original element: &apos;simpleFactory/src/simpleFactory&apos;&#x0D;&#x0A;- Renamed element: &apos;simpleFactory/src/T1020625&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;simpleFactory&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src=/optional=/true=/=/maven.pomderived=/true=/&lt;simpleFactory" name="T1020625" qualified="false" references="true" stamp="1742397318054" textual="false" version="1.0"/>
+</session>

@@ -1,0 +1,79 @@
+package simpleFactory;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+
+public class txtSinhVienDAO implements SinhVienDAO {
+
+    @Override
+    public ArrayList<SinhVien> docDanhSachSinhVien(String src) throws IOException {
+
+    	//"mặc định sẽ đọc từ file sinhvien.txt"
+        ArrayList<SinhVien> sv = new ArrayList<>();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(new FileReader(src));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] lines = line.split(",");
+                if (lines.length == 4) {
+                        SinhVien x = new SinhVien(lines[0], lines[1], Boolean.parseBoolean(lines[2]), lines[3]);
+                        sv.add(x); 
+            }
+            }
+        } finally {
+            if (br != null) br.close();  
+        }
+        return sv;
+    }
+    @Override
+    public int insertSinhVien (SinhVien sv) {
+    	// thiếu xử lý trùng mã sinh viên
+    	String filePath = "src/sinhvien.txt";
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+    		 writer.write("\n" + sv.getMaSinhVien() + ", " + sv.getHoTen() + ", " + sv.isGioiTinhNam() + ", " + sv.getNgaySinh());
+            return 1;
+        } catch (IOException e) {
+           return 0;
+        }
+    }
+    Boolean isExisted (SinhVien sv) {
+    	try {
+			BufferedReader br = new BufferedReader (new FileReader ("src/sinhvien.txt"));
+			String line ;
+			try {
+				while ((line = br.readLine())!=null) {
+					String [] lines = line.split(",");
+					if (lines.length==4) {
+						String masv = lines[0];
+						if (lines[0]==sv.getMaSinhVien()) {
+							return true;
+						}
+					}
+					
+				}
+				return false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+    }
+	@Override
+	public int deleteSinhVien(String maSinhVien) {
+		
+		return 0;
+	}
+}

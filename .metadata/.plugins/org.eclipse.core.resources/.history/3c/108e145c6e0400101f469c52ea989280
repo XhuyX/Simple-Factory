@@ -1,0 +1,2 @@
+Nguồn dữ liệu là file sinhvien.txt và bảng SinhVien trong MS SQl Server
+đối với file sinhvien.txt "src/sinhvien.txt", đối với Bảng SinhVien "jdbc:sqlserver://localhost:1433;databaseName=ViDuDB1;user=sa;password=sa;trustServerCertificate=true;"

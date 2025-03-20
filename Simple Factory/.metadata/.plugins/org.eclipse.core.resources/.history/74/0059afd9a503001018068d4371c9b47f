@@ -1,0 +1,23 @@
+package simpleFactory;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+public class ChuongTrinh {
+	static String sqlSelect;
+	
+	static void docsinhvien (String que, String type ) throws IOException, ParseException{
+		SinhVienDAO dao;
+		DocSinhVienFactory f = new DocSinhVienFactory();
+		dao = f.getPhuongThuc(type);
+		ArrayList <SinhVien> sv = dao.docDanhSachSinhVien(que);
+		for (int i=0;i<sv.size();i++) 
+			System.out.println(sv.get(i).getHoTen());
+	}
+	public static void main (String []arg) throws IOException, ParseException  {
+		docsinhvien("src/sinhvien.txt","txt");
+		docsinhvien("Select * from SinhVien order by MaSinhVien Desc","not txt");
+		
+	}
+}

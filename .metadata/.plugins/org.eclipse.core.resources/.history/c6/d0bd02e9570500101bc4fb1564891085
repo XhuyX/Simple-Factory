@@ -1,0 +1,61 @@
+package T1020625;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class ChuongTrinh {
+	
+	private static void hienThiDanhSach(ArrayList<SinhVien> danhSach) {
+	    for (SinhVien sv : danhSach) {
+	        System.out.println(
+	            sv.getMaSinhVien() + " " + 
+	            sv.getHoTen() + " " + 
+	            sv.isGioiTinhNam() + " " + 
+	            sv.getNgaySinh()
+	        );
+	    }
+	}
+	private static void themSinhVienTXT(SinhVienDAO daotxt, SinhVien sv) {
+	    boolean result = daotxt.insertSinhVien(sv);
+	    System.out.println(result ? "Đã thêm vào TXT" : "Lỗi thêm vào TXT");
+	}
+	private static void themSinhVienDB(SinhVienDAO daodb, SinhVien sv) {
+	    boolean result = daodb.insertSinhVien(sv);
+	    System.out.println(result ? "Đã thêm vào DB" : "Lỗi thêm vào DB");
+	}
+
+	private static void xoaSinhVienDB(SinhVienDAO daodb, String maSV) throws IOException {
+	    boolean result = daodb.deleteSinhVien(maSV);
+	    System.out.println(result ? "Đã xóa từ DB" : "Lỗi xóa từ DB");
+	}
+	private static void xoaSinhVienTXT(SinhVienDAO daotxt, String maSV) throws IOException {
+	    boolean result = daotxt.deleteSinhVien(maSV);
+	    System.out.println(result ? "Đã xóa từ TXT" : "Lỗi xóa từ TXT");
+	}
+
+	public static void main(String[] arg) {
+	    try {
+	        SinhVienFactory factory = new SinhVienFactory();
+	        SinhVienDAO daotxt = factory.getPhuongThuc("txt");
+	        SinhVienDAO daodb = factory.getPhuongThuc("not txt");
+
+	        // Đọc và hiển thị
+	        hienThiDanhSach(daotxt.readDanhSachSinhVien());
+	        System.out.println("Sinh viên từ database");
+	        hienThiDanhSach(daodb.readDanhSachSinhVien());
+
+	        // Thêm sinh viên
+	        themSinhVienTXT(daotxt, new SinhVien("T102002", "Huỳnh Quang", true, "2003/01/01"));
+	        themSinhVienDB(daodb, new SinhVien("T101997", "Nguyễn Công", true, "1999-01-01"));
+
+	        // Xóa sinh viên
+	        xoaSinhVienTXT(daotxt, "T102002");
+	        xoaSinhVienDB(daodb, "T102002");
+
+	    } catch (Exception e) {
+	        System.err.println("Lỗi chương trình: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+}

@@ -1,0 +1,17 @@
+package simpleFactory;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+public class ChuongTrinh {
+	public static void main (String []arg) throws IOException, ParseException {
+		SinhVienDAO dao;
+		DocSinhVienFactory f = new DocSinhVienFactory();
+		dao = f.getPhuongThuc("txt");
+		ArrayList <SinhVien> sv= dao.docDanhSachSinhVien("src/sinhvien.txt");
+		for (int i=0;i<sv.size();i++) {
+			System.out.println(sv.get(i).getHoTen());
+		}
+	}
+}

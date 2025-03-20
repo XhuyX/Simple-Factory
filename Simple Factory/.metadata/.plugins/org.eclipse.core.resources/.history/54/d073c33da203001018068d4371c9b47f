@@ -1,0 +1,15 @@
+package simpleFactory;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+public class DBSinhVienDAO implements SinhVienDAO{
+
+	@Override
+	public ArrayList<SinhVien> docDanhSachSinhVien() throws IOException, ParseException {
+		
+		return null;
+	}
+	
+}

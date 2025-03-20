@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module simpleFactory {
+	requires lombok;
+	requires java.sql;
+}
